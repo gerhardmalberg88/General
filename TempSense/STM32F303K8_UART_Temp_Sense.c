@@ -188,6 +188,7 @@ int main(void)
 		  minutesCounter++;
 		  if(minutesCounter > 60)
 		  {
+			  minutesCounter = 0;
 			  hoursCounter++;
 		  }
 	  }

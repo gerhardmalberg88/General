@@ -19,7 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include <stdio.h>
+// #include <stdio.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -63,7 +63,7 @@ static void MX_GPIO_Init(void);
 static void MX_RTC_Init(void);
 static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
-ADC_ChannelConfTypeDef MX_ADC1_Init(ADC_ChannelConfTypeDef sConfig);	// Modified to return sConfig for channel change
+ADC_ChannelConfTypeDef MX_ADC1_Init(ADC_ChannelConfTypeDef sConfig);	// Modified to return sConfig
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -74,7 +74,7 @@ char bufferToUART[60];										// This buffer is sent via UART
 uint8_t charCountUARTbuffer = 0;							// To count characters in UART going buffer
 uint16_t testCounter;										//TODO
 float ADC1_IN1, ADC1_IN2, ADC1_IN4, ADC1_IN11;				// Store ADC1 values for different channels
-char bufferInitialText[100] = "HOURS MINUTES SECONDS ADC1_CHANNEL1/10.0 ADC1_CHANNEL1/10.0 ADC1_CHANNEL4 ADC1_CHANNEL11 \n \r";
+char bufferInitialText[100] = "HOURS MINUTES SECONDS ADC1_CHANNEL1/10.0 ADC1_CHANNEL1/10.0 ADC1_CHANNEL4 ADC1_CHANNEL11 \n";
 uint8_t secondsCounter, minutesCounter, hoursCounter = 0;	// To count seconds, minutes & hours
 /* USER CODE END 0 */
 
@@ -105,12 +105,12 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  // MX_ADC1_Init(); 					// Replaced by sConfig = MX_ADC1_Init(sConfig)
+  // MX_ADC1_Init(); // NOT used
   MX_RTC_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  HAL_RTC_Init(&hrtc);
-  sConfig = MX_ADC1_Init(sConfig);		// Use this in ADC Init to return the sConfig for channel settings
+  HAL_RTC_Init(&hrtc);						// Use if needed
+  sConfig = MX_ADC1_Init(sConfig);			// Use this in ADC Init to return the sConfig from channel settings
 
   /* USER CODE END 2 */
 
@@ -123,78 +123,80 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	statusCheckTime = HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-	statusCheckDate = HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
+	  statusCheckTime = HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+	  statusCheckDate = HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
 
-	sConfig.Channel = ADC_CHANNEL_1;
-	HAL_ADC_ConfigChannel(&hadc1, &sConfig);
-	HAL_ADC_Start(&hadc1);
-	HAL_ADC_PollForConversion(&hadc1, 500);
-	ADC1_IN1 = HAL_ADC_GetValue(&hadc1);
-	HAL_ADC_Stop(&hadc1);
+	  sConfig.Channel = ADC_CHANNEL_1;
+	  HAL_ADC_ConfigChannel(&hadc1, &sConfig);
+	  HAL_ADC_Start(&hadc1);
+	  HAL_ADC_PollForConversion(&hadc1, 500);
+	  ADC1_IN1 = HAL_ADC_GetValue(&hadc1);
+	  //HAL_ADC_Stop(&hadc1);
 
-	sConfig.Channel = ADC_CHANNEL_2;
-	HAL_ADC_ConfigChannel(&hadc1, &sConfig);
-	HAL_ADC_Start(&hadc1);
-	HAL_ADC_PollForConversion(&hadc1, 500);
-	ADC1_IN2 = HAL_ADC_GetValue(&hadc1);
-	HAL_ADC_Stop(&hadc1);
+	  sConfig.Channel = ADC_CHANNEL_2;
+	  HAL_ADC_ConfigChannel(&hadc1, &sConfig);
+	  HAL_ADC_Start(&hadc1);
+	  HAL_ADC_PollForConversion(&hadc1, 500);
+	  ADC1_IN2 = HAL_ADC_GetValue(&hadc1);
+	  //HAL_ADC_Stop(&hadc1);
 
-	sConfig.Channel = ADC_CHANNEL_4;
-	HAL_ADC_ConfigChannel(&hadc1, &sConfig);
-	HAL_ADC_Start(&hadc1);
-	HAL_ADC_PollForConversion(&hadc1, 500);
-	ADC1_IN4 = HAL_ADC_GetValue(&hadc1);
-	HAL_ADC_Stop(&hadc1);
+	  sConfig.Channel = ADC_CHANNEL_4;
+	  HAL_ADC_ConfigChannel(&hadc1, &sConfig);
+	  HAL_ADC_Start(&hadc1);
+	  HAL_ADC_PollForConversion(&hadc1, 500);
+	  ADC1_IN4 = HAL_ADC_GetValue(&hadc1);
+	  //HAL_ADC_Stop(&hadc1);
 
-	sConfig.Channel = ADC_CHANNEL_11;			// PB0 = D3 on Nucleo
-	HAL_ADC_ConfigChannel(&hadc1, &sConfig);
-	HAL_ADC_Start(&hadc1);
-	HAL_ADC_PollForConversion(&hadc1, 500);
-	ADC1_IN11 = HAL_ADC_GetValue(&hadc1);
-	HAL_ADC_Stop(&hadc1);
+	  sConfig.Channel = ADC_CHANNEL_11;			// PB0 = D3 on Nucleo
+	  HAL_ADC_ConfigChannel(&hadc1, &sConfig);
+	  HAL_ADC_Start(&hadc1);
+	  HAL_ADC_PollForConversion(&hadc1, 500);
+	  ADC1_IN11 = HAL_ADC_GetValue(&hadc1);
+	  HAL_ADC_Stop(&hadc1);
 
-	if(statusCheckTime == HAL_OK && statusCheckDate == HAL_OK)
-	{
-	// HAL_Delay() is used instead of RTC. RTC being inaccurate(No LSE).
-		/*
-		secMinHourADCBuff[2] = sTime.Hours;
-		secMinHourADCBuff[1] = sTime.Minutes;
-		secMinHourADCBuff[0] = sTime.Seconds;
-		*/
-	}
+	  if(statusCheckTime == HAL_OK && statusCheckDate == HAL_OK)
+	  {
+		  // HAL_Delay() is used instead of RTC. RTC being inaccurate.
+		  /*
+		  secMinHourADCBuff[2] = sTime.Hours;
+		  secMinHourADCBuff[1] = sTime.Minutes;
+		  secMinHourADCBuff[0] = sTime.Seconds;
+		  */
+	  }
 
-	/*
-	165C (From -40 to +125) and 4095 (12bit ADC)
-	3300mV / 4095 = 0.805mV / bit
-	*/
-	ADC1_IN1 = ADC1_IN1/10.0;
-	ADC1_IN2 = ADC1_IN2/10.0;
+	  /*
+	  165C (From -40 to +125) and 4095 (12bit ADC)
+	  3300mV / 4095 = 0.805mV / bit
+	  */
+	  ADC1_IN1 = ADC1_IN1/10.0;
+	  ADC1_IN2 = ADC1_IN2/10.0;
+	  ADC1_IN4 = ADC1_IN4/10.0;
+	  ADC1_IN11 = ADC1_IN11/10.0;
 
-	charCountUARTbuffer = snprintf(bufferToUART, sizeof(bufferToUART), "Hr %d Min %d Sec %d A1 %.1f A2 %.1f A4 %.1f A11 %.1f \n \r",
-	secMinHourADCBuff[2], secMinHourADCBuff[1], secMinHourADCBuff[0], ADC1_IN1, ADC1_IN2, ADC1_IN4, ADC1_IN11);
+	  charCountUARTbuffer = snprintf(bufferToUART, sizeof(bufferToUART), "Hr %d Min %d Sec %d A1 %.1f A2 %.1f A4 %.1f A11 %.1f \n \r",
+			  secMinHourADCBuff[2], secMinHourADCBuff[1], secMinHourADCBuff[0], ADC1_IN1, ADC1_IN2, ADC1_IN4, ADC1_IN11);
 
 
-	HAL_Delay(840);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
-	secondsCounter++;
-	if(secondsCounter > 60)
-	{
-		secondsCounter = 0;
-		minutesCounter++;
-		if(minutesCounter > 60)
-		{
-			hoursCounter++;
-		}
-	}
-	// HAL_Delay() is used instead of RTC. RTC being inaccurate(No LSE).
-	secMinHourADCBuff[2] = hoursCounter;
-	secMinHourADCBuff[1] = minutesCounter;
-	secMinHourADCBuff[0] = secondsCounter;
+	  HAL_Delay(840);
+	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
+	  HAL_Delay(100);
+	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
+	  secondsCounter++;
+	  if(secondsCounter > 60)
+	  {
+		  secondsCounter = 0;
+		  minutesCounter++;
+		  if(minutesCounter > 60)
+		  {
+			  hoursCounter++;
+		  }
+	  }
+	  // HAL_Delay() is used instead of RTC. RTC being inaccurate.
+	  secMinHourADCBuff[2] = hoursCounter;
+	  secMinHourADCBuff[1] = minutesCounter;
+	  secMinHourADCBuff[0] = secondsCounter;
 
-	statusCheckUART = HAL_UART_Transmit(&huart2, (uint8_t*)bufferToUART, charCountUARTbuffer, 500);
+	  statusCheckUART = HAL_UART_Transmit(&huart2, (uint8_t*)bufferToUART, charCountUARTbuffer, 500);
 
   }
   /* USER CODE END 3 */

@@ -168,10 +168,10 @@ int main(void)
 	  165C (From -40 to +125) and 4095 (12bit ADC)
 	  3300mV / 4095 = 0.805mV / bit
 	  */
-	  ADC1_IN1 = ADC1_IN1/10.0;
+	  ADC1_IN1 = (ADC1_IN1/10.0) + 4.0;
 	  ADC1_IN2 = ADC1_IN2/10.0;
-	  ADC1_IN4 = ADC1_IN4/10.0;
-	  ADC1_IN11 = ADC1_IN11/10.0;
+	  ADC1_IN4 = (ADC1_IN4/10.0) + 1.5;
+	  ADC1_IN11 = (ADC1_IN11/10.0);
 
 	  charCountUARTbuffer = snprintf(bufferToUART, sizeof(bufferToUART), "Hr %d Min %d Sec %d A1 %.1f A2 %.1f A4 %.1f A11 %.1f \n \r",
 			  secMinHourADCBuff[2], secMinHourADCBuff[1], secMinHourADCBuff[0], ADC1_IN1, ADC1_IN2, ADC1_IN4, ADC1_IN11);

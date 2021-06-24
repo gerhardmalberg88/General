@@ -74,7 +74,7 @@ char bufferToUART[60];										// This buffer is sent via UART
 uint8_t charCountUARTbuffer = 0;							// To count characters in UART going buffer
 uint16_t testCounter;										//TODO
 float ADC1_IN1, ADC1_IN2, ADC1_IN4, ADC1_IN11;				// Store ADC1 values for different channels
-char bufferInitialText[100] = "HOURS MINUTES SECONDS ADC1_CHANNEL1/10.0 ADC1_CHANNEL1/10.0 ADC1_CHANNEL4 ADC1_CHANNEL11 \n";
+char bufferInitialText[100] = "HOURS MINUTES SECONDS ADC1_CHANNEL1 ADC1_CHANNEL2 ADC1_CHANNEL4 ADC1_CHANNEL11 \n";
 uint8_t secondsCounter, minutesCounter, hoursCounter = 0;	// To count seconds, minutes & hours
 /* USER CODE END 0 */
 
@@ -170,7 +170,7 @@ int main(void)
 	  */
 	  ADC1_IN1 = (ADC1_IN1/10.0) + 4.0;
 	  ADC1_IN2 = ADC1_IN2/10.0;
-	  ADC1_IN4 = (ADC1_IN4/10.0) + 1.5;
+	  ADC1_IN4 = (ADC1_IN4/10.0);
 	  ADC1_IN11 = (ADC1_IN11/10.0);
 
 	  charCountUARTbuffer = snprintf(bufferToUART, sizeof(bufferToUART), "Hr %d Min %d Sec %d A1 %.1f A2 %.1f A4 %.1f A11 %.1f \n \r",
@@ -182,11 +182,11 @@ int main(void)
 	  HAL_Delay(100);
 	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
 	  secondsCounter++;
-	  if(secondsCounter > 60)
+	  if(secondsCounter > 59)
 	  {
 		  secondsCounter = 0;
 		  minutesCounter++;
-		  if(minutesCounter > 60)
+		  if(minutesCounter > 59)
 		  {
 			  minutesCounter = 0;
 			  hoursCounter++;

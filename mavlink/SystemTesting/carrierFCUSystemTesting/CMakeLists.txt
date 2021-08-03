@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(carrierFCUSystemTesting)		# Changed for Test Automation
 
-add_executable(carrierFCUSystemTesting		# Changed for Test Automation
-	carrierFCUSystemTesting.cpp		# Changed for Test Automation, This is MAIN file
+add_executable(carrierFCUSystemTesting	# Changed for Test Automation
+	carrierFCUSystemTesting.cpp		    # Changed for Test Automation, This is MAIN file
     customSystemTestingLibrary.cpp		# Changed for Test Automation, This is Library file
     customSystemTestingLibrary.h		# Changed for Test Automation, This is Library file
 )
@@ -14,7 +14,6 @@ add_executable(carrierFCUSystemTesting		# Changed for Test Automation
 find_package(MAVSDK REQUIRED)
 
 target_link_libraries(carrierFCUSystemTesting
-	MAVSDK::mavsdk_calibration		# Added for Test Automation
     MAVSDK::mavsdk_telemetry                    # Added for Test Automation
     MAVSDK::mavsdk_mavlink_passthrough          # Added for Test Automation
     MAVSDK::mavsdk

@@ -116,7 +116,6 @@ carrierFCUSystemTesting_EXTERNAL_OBJECTS =
 carrierFCUSystemTesting: CMakeFiles/carrierFCUSystemTesting.dir/carrierFCUSystemTesting.cpp.o
 carrierFCUSystemTesting: CMakeFiles/carrierFCUSystemTesting.dir/customSystemTestingLibrary.cpp.o
 carrierFCUSystemTesting: CMakeFiles/carrierFCUSystemTesting.dir/build.make
-carrierFCUSystemTesting: /usr/local/lib/libmavsdk_calibration.so.0.41.0
 carrierFCUSystemTesting: /usr/local/lib/libmavsdk_telemetry.so.0.41.0
 carrierFCUSystemTesting: /usr/local/lib/libmavsdk_mavlink_passthrough.so.0.41.0
 carrierFCUSystemTesting: /usr/local/lib/libmavsdk.so.0.41.0

@@ -7,7 +7,6 @@ CMakeFiles/carrierFCUSystemTesting.dir/carrierFCUSystemTesting.cpp.o: /usr/local
 CMakeFiles/carrierFCUSystemTesting.dir/carrierFCUSystemTesting.cpp.o: /usr/local/include/mavsdk/deprecated.h
 CMakeFiles/carrierFCUSystemTesting.dir/carrierFCUSystemTesting.cpp.o: /usr/local/include/mavsdk/mavsdk.h
 CMakeFiles/carrierFCUSystemTesting.dir/carrierFCUSystemTesting.cpp.o: /usr/local/include/mavsdk/plugin_base.h
-CMakeFiles/carrierFCUSystemTesting.dir/carrierFCUSystemTesting.cpp.o: /usr/local/include/mavsdk/plugins/calibration/calibration.h
 CMakeFiles/carrierFCUSystemTesting.dir/carrierFCUSystemTesting.cpp.o: /usr/local/include/mavsdk/plugins/mavlink_passthrough/mavlink/v2.0/checksum.h
 CMakeFiles/carrierFCUSystemTesting.dir/carrierFCUSystemTesting.cpp.o: /usr/local/include/mavsdk/plugins/mavlink_passthrough/mavlink/v2.0/common/./mavlink_msg_actuator_control_target.h
 CMakeFiles/carrierFCUSystemTesting.dir/carrierFCUSystemTesting.cpp.o: /usr/local/include/mavsdk/plugins/mavlink_passthrough/mavlink/v2.0/common/./mavlink_msg_actuator_output_status.h
@@ -246,7 +245,6 @@ CMakeFiles/carrierFCUSystemTesting.dir/customSystemTestingLibrary.cpp.o: /usr/lo
 CMakeFiles/carrierFCUSystemTesting.dir/customSystemTestingLibrary.cpp.o: /usr/local/include/mavsdk/deprecated.h
 CMakeFiles/carrierFCUSystemTesting.dir/customSystemTestingLibrary.cpp.o: /usr/local/include/mavsdk/mavsdk.h
 CMakeFiles/carrierFCUSystemTesting.dir/customSystemTestingLibrary.cpp.o: /usr/local/include/mavsdk/plugin_base.h
-CMakeFiles/carrierFCUSystemTesting.dir/customSystemTestingLibrary.cpp.o: /usr/local/include/mavsdk/plugins/calibration/calibration.h
 CMakeFiles/carrierFCUSystemTesting.dir/customSystemTestingLibrary.cpp.o: /usr/local/include/mavsdk/plugins/mavlink_passthrough/mavlink/v2.0/checksum.h
 CMakeFiles/carrierFCUSystemTesting.dir/customSystemTestingLibrary.cpp.o: /usr/local/include/mavsdk/plugins/mavlink_passthrough/mavlink/v2.0/common/./mavlink_msg_actuator_control_target.h
 CMakeFiles/carrierFCUSystemTesting.dir/customSystemTestingLibrary.cpp.o: /usr/local/include/mavsdk/plugins/mavlink_passthrough/mavlink/v2.0/common/./mavlink_msg_actuator_output_status.h

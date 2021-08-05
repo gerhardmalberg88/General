@@ -9,14 +9,6 @@
 /home/uwb6/mavLink/MAVSDK/examples/carrierFCUSystemTesting/carrierFCUSystemTesting.cpp
 customSystemTestingLibrary.h
 /home/uwb6/mavLink/MAVSDK/examples/carrierFCUSystemTesting/customSystemTestingLibrary.h
-iomanip
--
-iostream
--
-cmath
--
-limits
--
 
 /home/uwb6/mavLink/MAVSDK/examples/carrierFCUSystemTesting/customSystemTestingLibrary.cpp
 customSystemTestingLibrary.h
@@ -24,8 +16,6 @@ customSystemTestingLibrary.h
 
 /home/uwb6/mavLink/MAVSDK/examples/carrierFCUSystemTesting/customSystemTestingLibrary.h
 mavsdk/mavsdk.h
--
-mavsdk/plugins/calibration/calibration.h
 -
 future
 -
@@ -39,16 +29,22 @@ chrono
 -
 cstdint
 -
-iostream
--
-future
--
 memory
 -
 thread
 -
 unistd.h
 -
+iomanip
+-
+iostream
+-
+cmath
+-
+limits
+-
+plugin_base.h
+/home/uwb6/mavLink/MAVSDK/examples/carrierFCUSystemTesting/plugin_base.h
 
 /usr/local/include/mavsdk/connection_result.h
 sstream
@@ -73,26 +69,6 @@ connection_result.h
 /usr/local/include/mavsdk/connection_result.h
 
 /usr/local/include/mavsdk/plugin_base.h
-
-/usr/local/include/mavsdk/plugins/calibration/calibration.h
-array
--
-cmath
--
-functional
--
-limits
--
-memory
--
-string
--
-utility
--
-vector
--
-plugin_base.h
-/usr/local/include/mavsdk/plugins/calibration/plugin_base.h
 
 /usr/local/include/mavsdk/plugins/mavlink_passthrough/mavlink/v2.0/checksum.h
 stdint.h

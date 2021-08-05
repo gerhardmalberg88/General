@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/carrierFCUSystemTesting.dir/carrierFCUSystemTesting.cpp.o CMakeFiles/carrierFCUSystemTesting.dir/customSystemTestingLibrary.cpp.o  -o carrierFCUSystemTesting -Wl,-rpath,/usr/local/lib /usr/local/lib/libmavsdk_telemetry.so.0.41.0 /usr/local/lib/libmavsdk_mavlink_passthrough.so.0.41.0 /usr/local/lib/libmavsdk.so.0.41.0 

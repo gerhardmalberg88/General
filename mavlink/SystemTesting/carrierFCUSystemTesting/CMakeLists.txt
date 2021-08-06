@@ -16,6 +16,9 @@ find_package(MAVSDK REQUIRED)
 target_link_libraries(carrierFCUSystemTesting
     MAVSDK::mavsdk_telemetry                    # Added for Test Automation
     MAVSDK::mavsdk_mavlink_passthrough          # Added for Test Automation
+    MAVSDK::mavsdk_tune                         # Added for Test Automation
+    MAVSDK::mavsdk_info                         # Added for Test Automation
+    MAVSDK::mavsdk_action                       # Added for Test Automation
     MAVSDK::mavsdk
 )
 

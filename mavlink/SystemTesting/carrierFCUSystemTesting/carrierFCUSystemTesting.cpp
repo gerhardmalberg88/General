@@ -47,12 +47,14 @@ int main(int argc, char** argv)
     Telemetry::Health telemetryHealth;                                                  // Instance for Health struct
     Telemetry::RcStatus telemetryRcStatus;                                              // Instance for RcStatus struct
     Telemetry::Battery telemetryBattery;                                                // Instance for Battery struct
+    Telemetry::ActuatorControlTarget telemetryActuatorControlTarget;                    // Instance for Actuator struct
+    Telemetry::DistanceSensor telemetryDistanceSensor;                                  // Instance for DistanceSensor struct 
     std::pair<Info::Result, Info::Identification> hardwareIDPairResult;                 // Hardware and result pair
     std::pair<Info::Result, Info::Version> versionPairResult;                           // Version and result pair
     std::pair<Info::Result, Info::Product> productVendorIDPairResult;                   // Product and vendor ID and result pair
 
     //############################################################################
-    // Plugins use in continous subscription method (Blocking)
+    // Plugins use in continous subscription method
     //using AttitudeQuaternionCallback = std::function<void(Quaternion)>;                                  DON'T uncomment this, used for reference
     //void TelemetryImpl::subscribe_attitude_quaternion(Telemetry::AttitudeQuaternionCallback& callback)   DON'T uncomment this, used for reference
     //telemetry.subscribe_attitude_quaternion([](Telemetry::Quaternion telemetryQuaternionBySubscribe) { std::cout << "QuaternionBySubscribing.x " << telemetryQuaternionBySubscribe.y << std::endl; });
@@ -112,7 +114,7 @@ int main(int argc, char** argv)
 
     for(int i = 0; i < iterationOfDataAquire; i++)
     {
-        telemetryRcStatus = telemetry.rc_status();                                      // Get RcStatus data and store it to struct
+        telemetryRcStatus = telemetry.rc_status();                                      // Get Rc status data and store it to struct
         std::cout 
         << "| RC is available: "            << telemetryRcStatus.is_available
         << "| RC signal strength: "         << telemetryRcStatus.signal_strength_percent
@@ -131,22 +133,64 @@ int main(int argc, char** argv)
         << std::endl;
         usleep(timeWaitBetweenDataAquire);
     }
-
-    // TODO Add LIDAR check
     
+    for(int i = 0; i < 100; i++)
+    {
+        telemetryDistanceSensor = telemetry.distance_sensor();                          // Get data from Distance sensor (FCU firmaware must be configured for LeddarOne)
+        if(isnan((float)telemetryDistanceSensor.current_distance_m))
+        {
+            std::cerr << "LeddarOne ranger distance returns NAN, check connection of LeddarOne" << std::endl;
+            return 1;
+        }
+        std::cout
+        << "| Distance sensor LeddarOne current distance: "     << telemetryDistanceSensor.current_distance_m
+        << "| Distance sensor LeddarOne max distance: "         << telemetryDistanceSensor.maximum_distance_m
+        << "| Distance sensor LeddarOne min distance: "         << telemetryDistanceSensor.minimum_distance_m
+        << std::endl;
+        usleep(timeWaitBetweenDataAquire);
+    }
 
-
+    // TODO Camera add check
+    std::cout << "Camera status: ";
+    if (system->has_camera(/*Camera ID as parameter, else checks for any camera*/))     // Check for camera connection (FCU Firmware must be configured PixyCam for camera)
+    {
+        std::cout << "Camera connected and detected\n";
+    }
+    else
+    {
+        std::cout << "No camera connected or detected\n";
+    }
+    
     // TODO or fix this and add Parachute (Actuator/Servo) check
-
-    const int index = 2;
-    const float value = 0.0;
+    const int indexActuator = 2;            // Actuator index                                                                             
+    const float valueActuator = 0.5;        // Actuator value (-1.0 to 1.0 goes from 1000 to 2000)
     Action::ResultCallback callback2;
-    std::cout << "Setting actuator...\n";
-    const Action::Result set_actuator_result = action.set_actuator(index, value);
-    if (set_actuator_result != Action::Result::Success) {
+    std::cout << "Setting PWM to parachute pin\n";
+    const Action::Result set_actuator_result = action.set_actuator(indexActuator, valueActuator);       // Command PWM to parachute pin
+    if (set_actuator_result != Action::Result::Success) 
+    {
         std::cerr << "Setting actuator failed:" << set_actuator_result << '\n';
         return 1;
     }
+    if (set_actuator_result == Action::Result::Success) 
+    {
+        std::cout << "Setting succeeded\n";
+    }
+    int myinteger{4};
+    std::cout << "weirdInteger ->>>>>>>> " << myinteger << std::endl;
+
+    // TODO Check the actuators
+    // telemetryActuatorOutputStatus.active = 5;
+    // telemetryActuatorOutputStatus.actuator.push_back(5.0);
+    telemetryActuatorControlTarget = telemetry.actuator_control_target();
+    std::cout << "Actuator value " << telemetryActuatorControlTarget.controls.size() << " first " << telemetryActuatorControlTarget.group << std::endl;
+
+
+        // int32_t group{0}; /**< @brief An actuator control group is e.g. 'attitude' for the core
+        //                      flight controls, or 'gimbal' for a payload. */
+        // std::vector<float>
+        //     controls{}; /**< @brief Controls normed from -1 to 1, where 0 is neutral position. */
+
 
     for(int i = 0; i < iterationOfDataAquire; i++)
     {
@@ -190,7 +234,8 @@ int main(int argc, char** argv)
     tune_description.song_elements = song_elements;
     tune_description.tempo = tempo;
     const auto result = tune.play_tune(tune_description);
-    if (result != Tune::Result::Success) {
+    if (result != Tune::Result::Success) 
+    {
         std::cerr << "Tune result: " << result << '\n'; 
         return 1;
     }

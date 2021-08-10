@@ -1,6 +1,6 @@
 # Follow commands to Build, Compile & Run program
 
-# Build MAVSDK from source
+### Build MAVSDK from source
 ``` 
 git clone https://github.com/mavlink/MAVSDK.git
 ``` 
@@ -25,7 +25,7 @@ cmake --build build
 sudo cmake --build build --target install
 ``` 
 
-# Build and Compile Example at example directory
+### Build and Compile Example at example directory
 ``` 
 cmake -Bbuild -H.
 ``` 
@@ -34,7 +34,7 @@ cmake -Bbuild -H.
 cmake --build
 ``` 
 
-# Run example using UART connection
+### Run example using UART connection
 ``` 
 sudo ./carrierFCUSystemTesting serial:///dev/ttyACM0:57600
 ``` 

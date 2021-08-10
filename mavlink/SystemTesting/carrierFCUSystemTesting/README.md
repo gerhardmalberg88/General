@@ -25,7 +25,7 @@ cmake --build build
 sudo cmake --build build --target install
 ``` 
 
-### Build and Compile Example at example directory
+### Build and Compile carrierFCUSystemTesting program at carrierFCUSystemTesting directory
 ``` 
 cmake -Bbuild -H.
 ``` 

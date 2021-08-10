@@ -1,4 +1,4 @@
-# Follow commands to Build, Compile & Run program
+# Follow commands to Generate, Build, Compile & Run program
 
 ### Build MAVSDK from source
 Clone MAVSDK

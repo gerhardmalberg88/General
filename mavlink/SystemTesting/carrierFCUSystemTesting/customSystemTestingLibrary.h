@@ -4,6 +4,7 @@
 #include "plugins/info/info.h"                                          // Added library for Test Automation
 #include <mavsdk/plugins/tune/tune.h>                                   // Added library for Test Automation
 #include <mavsdk/plugins/action/action.h>                               // Added library for Test Automation
+#include <mavsdk/plugins/offboard/offboard.h>                           // Added library for Test Automation
 
 #include <cstdint>                                                      // Added library for Test Automation
 #include <chrono>                                                       // Added library for Test Automation

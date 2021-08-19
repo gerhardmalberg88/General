@@ -19,6 +19,7 @@ target_link_libraries(carrierFCUSystemTesting
     MAVSDK::mavsdk_tune                         # Added for Test Automation
     MAVSDK::mavsdk_info                         # Added for Test Automation
     MAVSDK::mavsdk_action                       # Added for Test Automation
+    MAVSDK::mavsdk_offboard                     # Added for Test Automation
     MAVSDK::mavsdk
 )
 

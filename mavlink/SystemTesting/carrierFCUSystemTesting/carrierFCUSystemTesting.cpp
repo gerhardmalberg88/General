@@ -13,6 +13,7 @@ int main(int argc, char** argv)
 {
     //############################################################################
     // System & MAVLINK initialization
+    // TODO Use UDP connection
 
     if (argc != 2) 
     {
@@ -39,6 +40,7 @@ int main(int argc, char** argv)
     Info info(system);                                                                  // Info class instance
     MavlinkPassthrough mavlink_passthrough(system);                                     // Passthrough class instance
     Action action(system);                                                              // Action class instance
+    Offboard offboard(system);                                                          // Offboard class instance
 
     Telemetry::Quaternion telemetryQuaternion;                                          // Instance for Quaternion struct
     Telemetry::Imu telemetryImuAll;                                                     // Instance for Imu struct
@@ -49,9 +51,16 @@ int main(int argc, char** argv)
     Telemetry::Battery telemetryBattery;                                                // Instance for Battery struct
     Telemetry::ActuatorControlTarget telemetryActuatorControlTarget;                    // Instance for Actuator struct
     Telemetry::DistanceSensor telemetryDistanceSensor;                                  // Instance for DistanceSensor struct 
+
+    Offboard::ActuatorControl offboardActuatorControl;                                  // Instance for offboard actuator group control struct
+    Offboard::ActuatorControlGroup offboardActuatorControlGroup;                        // Instance for offboard actuator group select struct
+    Offboard::Result offboardResult;                                                    // Instance for offboard results enum
+
     std::pair<Info::Result, Info::Identification> hardwareIDPairResult;                 // Hardware and result pair
     std::pair<Info::Result, Info::Version> versionPairResult;                           // Version and result pair
     std::pair<Info::Result, Info::Product> productVendorIDPairResult;                   // Product and vendor ID and result pair
+
+    Action::Result armingResult;                                                        // Arming result enum                                    
 
     //############################################################################
     // Plugins use in continous subscription method
@@ -65,6 +74,22 @@ int main(int argc, char** argv)
     long timeWaitBetweenDataAquire      = 500000;                                       // Set time that is required to be waited before next data acquisition
     uint8_t our_sysid                   = 1;                                            // Stores our system ID fot parachute check
     sleep(1);                                                                           // Wait for system to get ready
+
+
+    // TODO Arm vehicle
+    // 1. Configure arm check off to be able to arm without checking
+    // 2. Arm vehicle
+    // PX4 Configuration:
+    // COM_ARM_MAG_STR = 0
+    // COM_OBL_ACT = Disabled
+    // COM_OBL_RC_ACT = Disabled
+
+
+    // TODO Check if following check can be used
+    // while (!telemetry.health_all_ok()) {
+    //     std::cout << "Waiting for system to be ready\n";
+    //     sleep(1);
+    // }
 
     hardwareIDPairResult        = info.get_identification();                            // Get hardware and software version and product id                                   
     versionPairResult           = info.get_version();
@@ -114,7 +139,7 @@ int main(int argc, char** argv)
 
     for(int i = 0; i < iterationOfDataAquire; i++)
     {
-        telemetryRcStatus = telemetry.rc_status();                                      // Get Rc status data and store it to struct
+        telemetryRcStatus = telemetry.rc_status();                                      // Get RC status data and store it to struct
         std::cout 
         << "| RC is available: "            << telemetryRcStatus.is_available
         << "| RC signal strength: "         << telemetryRcStatus.signal_strength_percent
@@ -134,7 +159,7 @@ int main(int argc, char** argv)
         usleep(timeWaitBetweenDataAquire);
     }
     
-    for(int i = 0; i < 100; i++)
+    for(int i = 0; i < iterationOfDataAquire; i++)
     {
         telemetryDistanceSensor = telemetry.distance_sensor();                          // Get data from Distance sensor (FCU firmaware must be configured for LeddarOne)
         if(isnan((float)telemetryDistanceSensor.current_distance_m))
@@ -150,7 +175,7 @@ int main(int argc, char** argv)
         usleep(timeWaitBetweenDataAquire);
     }
 
-    // TODO Camera add check
+    // TODO Camera add more checks or delete
     std::cout << "Camera status: ";
     if (system->has_camera(/*Camera ID as parameter, else checks for any camera*/))     // Check for camera connection (FCU Firmware must be configured PixyCam for camera)
     {
@@ -160,13 +185,39 @@ int main(int argc, char** argv)
     {
         std::cout << "No camera connected or detected\n";
     }
-    
+
+    /*
+    // ################### Use only if offboard control mode is used
+    // bool setpointStatus{0};
+    // setpointStatus = offboard.is_active();
+    // std::cout << "setpointStatus " << setpointStatus << std::endl;
+    // action.arm();
+    // for(int i = 0; i <= 16; i++)
+    // {
+    //     offboardActuatorControlGroup.controls.push_back(1000);
+    //     std::cout << i << std::endl;
+    // }
+    // offboardActuatorControl.groups.push_back(offboardActuatorControlGroup);
+    // offboardActuatorControl.groups.push_back(offboardActuatorControlGroup);
+    // std::cout << "offboardActuatorContorl size " << offboardActuatorControl.groups.size() << std::endl;
+    // std::cout << "offboardActuatorContorl size " << offboardActuatorControlGroup.controls.size() << std::endl;
+    // offboardResult = offboard.set_actuator_control(offboardActuatorControl);
+    // std::cout << "offboardResult " << offboardResult << std::endl;
+    // setpointStatus = offboard.is_active();
+    // std::cout << "setpointStatus " << setpointStatus << std::endl;
+    // sleep(2);
+    // //offboardResult = offboard.start();
+    // std::cout << "offboardResult " << offboardResult << std::endl;
+    // setpointStatus = offboard.is_active();
+    // std::cout << "setpointStatus " << setpointStatus << std::endl;
+    // //Offboard::Result set_actuator_control(Offboard::ActuatorControl actuator_control);
+    */
+
     // TODO or fix this and add Parachute (Actuator/Servo) check
-    const int indexActuator = 2;            // Actuator index                                                                             
-    const float valueActuator = 0.5;        // Actuator value (-1.0 to 1.0 goes from 1000 to 2000)
-    Action::ResultCallback callback2;
+    int indexActuator = 1;            // Actuator index                                                                             
+    float valueActuator = 0.8;        // Actuator value (-1.0 to 1.0 goes from 1000 to 2000)
     std::cout << "Setting PWM to parachute pin\n";
-    const Action::Result set_actuator_result = action.set_actuator(indexActuator, valueActuator);       // Command PWM to parachute pin
+    Action::Result set_actuator_result = action.set_actuator(indexActuator, valueActuator);       // Command PWM to parachute pin
     if (set_actuator_result != Action::Result::Success) 
     {
         std::cerr << "Setting actuator failed:" << set_actuator_result << '\n';
@@ -176,14 +227,35 @@ int main(int argc, char** argv)
     {
         std::cout << "Setting succeeded\n";
     }
-    int myinteger{4};
-    std::cout << "weirdInteger ->>>>>>>> " << myinteger << std::endl;
+    sleep(1);
+
+    // indexActuator = 2;              // Actuator index                                                                             
+    // valueActuator = 1100;            // Actuator value (-1.0 to 1.0 goes from 1000 to 2000)
+    // std::cout << "Setting PWM to parachute pin\n";
+    // set_actuator_result = action.set_actuator(indexActuator, valueActuator);                    // Command PWM to parachute pin
+    // if (set_actuator_result != Action::Result::Success) 
+    // {
+    //     std::cerr << "Setting actuator failed:" << set_actuator_result << '\n';
+    //     return 1;
+    // }
+    // if (set_actuator_result == Action::Result::Success) 
+    // {
+    //     std::cout << "Setting succeeded\n";
+    // }
+    // sleep(1);
 
     // TODO Check the actuators
     // telemetryActuatorOutputStatus.active = 5;
     // telemetryActuatorOutputStatus.actuator.push_back(5.0);
     telemetryActuatorControlTarget = telemetry.actuator_control_target();
-    std::cout << "Actuator value " << telemetryActuatorControlTarget.controls.size() << " first " << telemetryActuatorControlTarget.group << std::endl;
+    std::cout << "Actuator value: "
+    // << "| AUX1 " << telemetryActuatorControlTarget.controls.front()
+    // << "| AUX2 " << telemetryActuatorControlTarget.controls.at(2)
+    // << "| AUX3 " << telemetryActuatorControlTarget.controls.at(3)
+    // << "| AUX4 " << telemetryActuatorControlTarget.controls.at(4)
+    // << "| AUX5 " << telemetryActuatorControlTarget.controls.at(5)
+    // << "| AUX6 " << telemetryActuatorControlTarget.controls.at(6)
+    << std::endl;
 
 
         // int32_t group{0}; /**< @brief An actuator control group is e.g. 'attitude' for the core
@@ -239,7 +311,18 @@ int main(int argc, char** argv)
         std::cerr << "Tune result: " << result << '\n'; 
         return 1;
     }
-
+    std::cout << "Trying to arm the vehicle: ";
+    sleep(1);
+    action.arm();
+    if(armingResult != Action::Result::Success)
+    {
+    std::cout << "Arming Failed" << std::endl;
+    }
+    if(armingResult == Action::Result::Success)
+    {
+    std::cout << "Arming Succeeded" << std::endl;
+    }
+    sleep(1);
     return 0;
 }
 

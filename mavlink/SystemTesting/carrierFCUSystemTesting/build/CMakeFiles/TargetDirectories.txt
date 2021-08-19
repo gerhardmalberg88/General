@@ -1,0 +1,3 @@
+/home/uwb6/mavLink/MAVSDK/examples/carrierFCUSystemTesting/build/CMakeFiles/rebuild_cache.dir
+/home/uwb6/mavLink/MAVSDK/examples/carrierFCUSystemTesting/build/CMakeFiles/carrierFCUSystemTesting.dir
+/home/uwb6/mavLink/MAVSDK/examples/carrierFCUSystemTesting/build/CMakeFiles/edit_cache.dir

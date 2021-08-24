@@ -60,8 +60,34 @@ int main(int argc, char** argv)
     std::pair<Info::Result, Info::Version> versionPairResult;                           // Version and result pair
     std::pair<Info::Result, Info::Product> productVendorIDPairResult;                   // Product and vendor ID and result pair
 
-    Action::Result armingResult;                                                        // Arming result enum                                    
+    Action::Result armingResult;                                                        // Arming result enum
 
+    //############################################################################
+    // Raw MAVLINK message handling 
+    // Commands == used for commanding or setting, ACK is returned by the FCU
+    // Messages == can be used for data stream, data stream is returned by the FCU
+
+    // System ID AKA Network ID is stored at FCU EEPROM (Set to 1 by default) 
+    // Component ID is system-unique component ID and used for addressing and routing
+
+    /* TODO Perform RAW MAVLINK message handling
+    // Result send_command_int(const CommandInt& command);                                                          DON'T uncomment this, used for reference
+    // void subscribe_message_async(uint16_t message_id, std::function<void(const mavlink_message_t&)> callback);   DON'T uncomment this, used for reference
+    std::cout << "MAVLINK passthrought started, handling raw MAVLINK messages" << std::endl;
+    MavlinkPassthrough::Result passthroughtResult;
+    mavlink_message_t messageToBeSent;
+    messageToBeSent.seq     = 255;
+    messageToBeSent.len     = 255;
+    messageToBeSent.sysid   = mavlink_passthrough.get_our_sysid();
+    messageToBeSent.compid  = mavlink_passthrough.get_our_compid();
+    messageToBeSent.msgid   = 31;                                                   // To request target sysID & compID
+    passthroughtResult = mavlink_passthrough.send_message(messageToBeSent);
+    std::cout << "Message ACK status: " << passthroughtResult << std::endl;
+    mavlink_passthrough.subscribe_message_async(31, [](mavlink_message_t messageProto){std::cout << "###### Callback function for subscribe " << std::endl;});
+    uint8_t ourSysID = mavlink_passthrough.get_our_sysid();
+    uint8_t ourCompID = mavlink_passthrough.get_our_compid();
+    std::cout << "Stopped handling raw MAVLINK messages" << std::endl;
+    */
     //############################################################################
     // Plugins use in continous subscription method
     //using AttitudeQuaternionCallback = std::function<void(Quaternion)>;                                  DON'T uncomment this, used for reference

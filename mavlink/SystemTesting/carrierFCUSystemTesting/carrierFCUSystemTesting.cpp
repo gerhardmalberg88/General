@@ -70,7 +70,8 @@ int main(int argc, char** argv)
     // System ID AKA Network ID is stored at FCU EEPROM (Set to 1 by default) 
     // Component ID is system-unique component ID and used for addressing and routing
 
-    /* TODO Perform RAW MAVLINK message handling
+    /* 
+    // TODO Perform RAW MAVLINK message handling
     // Result send_command_int(const CommandInt& command);                                                          DON'T uncomment this, used for reference
     // void subscribe_message_async(uint16_t message_id, std::function<void(const mavlink_message_t&)> callback);   DON'T uncomment this, used for reference
     std::cout << "MAVLINK passthrought started, handling raw MAVLINK messages" << std::endl;
@@ -214,31 +215,32 @@ int main(int argc, char** argv)
 
     /*
     // ################### Use only if offboard control mode is used
-    // bool setpointStatus{0};
-    // setpointStatus = offboard.is_active();
-    // std::cout << "setpointStatus " << setpointStatus << std::endl;
-    // action.arm();
-    // for(int i = 0; i <= 16; i++)
-    // {
-    //     offboardActuatorControlGroup.controls.push_back(1000);
-    //     std::cout << i << std::endl;
-    // }
-    // offboardActuatorControl.groups.push_back(offboardActuatorControlGroup);
-    // offboardActuatorControl.groups.push_back(offboardActuatorControlGroup);
-    // std::cout << "offboardActuatorContorl size " << offboardActuatorControl.groups.size() << std::endl;
-    // std::cout << "offboardActuatorContorl size " << offboardActuatorControlGroup.controls.size() << std::endl;
-    // offboardResult = offboard.set_actuator_control(offboardActuatorControl);
-    // std::cout << "offboardResult " << offboardResult << std::endl;
-    // setpointStatus = offboard.is_active();
-    // std::cout << "setpointStatus " << setpointStatus << std::endl;
-    // sleep(2);
-    // //offboardResult = offboard.start();
-    // std::cout << "offboardResult " << offboardResult << std::endl;
-    // setpointStatus = offboard.is_active();
-    // std::cout << "setpointStatus " << setpointStatus << std::endl;
-    // //Offboard::Result set_actuator_control(Offboard::ActuatorControl actuator_control);
+    bool setpointStatus{0};
+    setpointStatus = offboard.is_active();
+    std::cout << "setpointStatus " << setpointStatus << std::endl;
+    action.arm();
+    for(int i = 0; i <= 16; i++)
+    {
+        offboardActuatorControlGroup.controls.push_back(1000);
+        std::cout << i << std::endl;
+    }
+    offboardActuatorControl.groups.push_back(offboardActuatorControlGroup);
+    offboardActuatorControl.groups.push_back(offboardActuatorControlGroup);
+    std::cout << "offboardActuatorContorl size " << offboardActuatorControl.groups.size() << std::endl;
+    std::cout << "offboardActuatorContorl size " << offboardActuatorControlGroup.controls.size() << std::endl;
+    offboardResult = offboard.set_actuator_control(offboardActuatorControl);
+    std::cout << "offboardResult " << offboardResult << std::endl;
+    setpointStatus = offboard.is_active();
+    std::cout << "setpointStatus " << setpointStatus << std::endl;
+    sleep(2);
+    //offboardResult = offboard.start();
+    std::cout << "offboardResult " << offboardResult << std::endl;
+    setpointStatus = offboard.is_active();
+    std::cout << "setpointStatus " << setpointStatus << std::endl;
+    //Offboard::Result set_actuator_control(Offboard::ActuatorControl actuator_control);
     */
 
+    /*
     // TODO or fix this and add Parachute (Actuator/Servo) check
     int indexActuator = 1;            // Actuator index                                                                             
     float valueActuator = 0.8;        // Actuator value (-1.0 to 1.0 goes from 1000 to 2000)
@@ -254,6 +256,7 @@ int main(int argc, char** argv)
         std::cout << "Setting succeeded\n";
     }
     sleep(1);
+    */
 
     // indexActuator = 2;              // Actuator index                                                                             
     // valueActuator = 1100;            // Actuator value (-1.0 to 1.0 goes from 1000 to 2000)
@@ -337,6 +340,7 @@ int main(int argc, char** argv)
         std::cerr << "Tune result: " << result << '\n'; 
         return 1;
     }
+    /*
     std::cout << "Trying to arm the vehicle: ";
     sleep(1);
     action.arm();
@@ -349,6 +353,7 @@ int main(int argc, char** argv)
     std::cout << "Arming Succeeded" << std::endl;
     }
     sleep(1);
+    */
     return 0;
 }
 

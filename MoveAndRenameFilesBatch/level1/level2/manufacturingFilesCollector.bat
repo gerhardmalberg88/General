@@ -29,4 +29,9 @@ echo ********************** File exists, do nothing here **********************
 echo **************************************************************************
 Rem Add Log output also
 Rem copy NUL %~dp0\..\folderInLevel1\EmptyFile.txt
+
+Rem for newest file access
+for /f %%x in ('dir *.txt /B /O:-D') do set NEWEST_EXE = %%x
+echo The most recently created file is %NEWEST_EXE%
+
 )

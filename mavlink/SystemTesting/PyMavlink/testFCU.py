@@ -25,9 +25,13 @@ heartbeatCounter = 0
 notAvailableStatus = "Not Available"
 
 # TODO Better implementation to "Not Available"
-gps1Msg = notAvailableStatus
-gps2Msg = notAvailableStatus
-
+gps1Msg         = notAvailableStatus
+gps2Msg         = notAvailableStatus
+distSensor      = notAvailableStatus
+rawImu          = notAvailableStatus
+scaledPressure1 = notAvailableStatus
+scaledPressure2 = notAvailableStatus
+pixyCam         = notAvailableStatus
 
 while heartbeatCounter  < 2:
     msg = master.recv_match()
@@ -37,7 +41,7 @@ while heartbeatCounter  < 2:
     if msg.get_type() == "HEARTBEAT":
         #print("Heartbeat Detected")        
         #print("\n\n*****Got message: %s*****" % msg.get_type())
-        print("Message: %s" % msg)
+        #print("Message: %s" % msg)
         heartbeatMsg = msg
         heartbeatCounter = heartbeatCounter+1
 
@@ -46,15 +50,102 @@ while heartbeatCounter  < 2:
         #print("Message: %s" % msg)
         gps1Msg = msg
     
-    if msg.get_type() == "LANDING_TARGET":
+    if msg.get_type() == "GPS2_RAW":
         #print("\n\n*****Got message: %s*****" % msg.get_type())
-        print("Message: %s" % msg)
+        #print("Message: %s" % msg)
         gps2Msg = msg
 
+    if msg.get_type() == "DISTANCE_SENSOR":
+        #print("\n\n*****Got message: %s*****" % msg.get_type())
+        #print("Message: %s" % msg)
+        distSensor = msg
 
-print("Heartbeat ", heartbeatMsg)
-print("GPS1 ", gps1Msg)
-print("GPS2 ", gps2Msg)
+    if msg.get_type() == "RAW_IMU":
+        #print("\n\n*****Got message: %s*****" % msg.get_type())
+        #print("Message: %s" % msg)
+        rawImu = msg
 
-# GPS2_RAW
+    if msg.get_type() == "SCALED_PRESSURE":
+        #print("\n\n*****Got message: %s*****" % msg.get_type())
+        #print("Message: %s" % msg)
+        scaledPressure1 = msg
+
+    if msg.get_type() == "SCALED_PRESSURE2":
+        #print("\n\n*****Got message: %s*****" % msg.get_type())
+        #print("Message: %s" % msg)
+        scaledPressure2 = msg
+
+    if msg.get_type() == "LANDING_TARGET":
+        #print("\n\n*****Got message: %s*****" % msg.get_type())
+        #print("Message: %s" % msg)
+        pixyCam = msg
+
+# GPS1 OK/NOK
+try:
+    getattr(gps1Msg, "fix_type")
+except  AttributeError: 
+    gps1MsgResult = nok
+else:
+    gps1MsgResult = ok
+if gps1MsgResult == ok:
+    if gps1Msg.fix_type == 0:
+        gps1MsgResult = nok
+    else:
+        gps1MsgResult = ok
+print ("GPS1            %s" %gps1MsgResult)
+
+# GPS2 OK/NOK
+try:
+    getattr(gps2Msg, "fix_type")
+except AttributeError:
+    gps2MsgResult = nok
+else:
+    gps2MsgResult = ok
+if gps2MsgResult == ok:
+    if gps2Msg.fix_type == 0:
+        gps2MsgResult = nok
+    else:
+        gps2MsgResult = ok
+print ("GPS2            %s" %gps2MsgResult)
+
+# LeddarOne OK/NOK
+try:
+    getattr(distSensor, "current_distance")
+except AttributeError:
+    distSensorResult = nok
+else:
+    distSensorResult = ok
+if distSensorResult == ok:
+    if distSensor.current_distance == 0:
+        distSensorResult = nok
+    else:
+        distSensorResult = ok
+print ("LeddarOne       %s" %distSensorResult)
+
+# Magnetometers OK/NOK TODO Detect one missing magnetometer
+try:
+    getattr(rawImu, "xmag")
+except AttributeError:
+    rawImuResult = nok
+else:
+    rawImuResult = ok
+if rawImuResult == ok:
+    if rawImu.xmag == 0 and rawImu.ymag == 0 and rawImu.zmag == 0:
+        rawImuResult = nok
+    else:
+        rawImuResult = ok
+print ("Magnetometers   %s" %rawImuResult)
+
+print("======================================================================")
+print("Heartbeat       %s" % heartbeatMsg)
+print("GPS1            %s   %s" % (gps1MsgResult, gps1Msg))
+print("GPS2            %s   %s" % (gps2MsgResult, gps2Msg))
+print("LeddarOne       %s   %s" % (distSensorResult, distSensor))
+print("RawIMU          %s" % rawImu)
+print("ScaledPressure1 %s" % scaledPressure1)
+print("ScaledPressure2 %s" % scaledPressure2)
+print("PixyCam         %s" % pixyCam)
+print("======================================================================")
+
+# TODO Magnetometer, Rangefinder(Leddarone), PixyCam, IMU Pressure, IMU Accel, IMU Gyro,
 print("Program Finished")

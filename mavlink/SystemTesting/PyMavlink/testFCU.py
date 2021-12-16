@@ -10,8 +10,8 @@ import sys
 # Instantiate the parser
 parser = argparse.ArgumentParser()
 # Parse Serial path or UDP string
-parser.add_argument('pos_arg1', type=str,
-        help="For Serial use /dev/ttyACM0 For UDP use udp:localhost:14460")
+parser.add_argument('--pos_arg1', type=str, default="/dev/ttyACM0",
+        help="For Serial use /dev/ttyACM0 For UDP use udp:localhost:14460; Default: /dev/ttyACM0")
 args = parser.parse_args()
 #print("Argument values:")
 #print(args.pos_arg1)
@@ -23,15 +23,18 @@ master = mavutil.mavlink_connection(args.pos_arg1)
 master.wait_heartbeat()
 heartbeatCounter = 0
 notAvailableStatus = "Not Available"
+ok  = "OK"
+nok = "NOK"
 
 # TODO Better implementation to "Not Available"
-gps1Msg         = notAvailableStatus
-gps2Msg         = notAvailableStatus
-distSensor      = notAvailableStatus
-rawImu          = notAvailableStatus
-scaledPressure1 = notAvailableStatus
-scaledPressure2 = notAvailableStatus
-pixyCam         = notAvailableStatus
+heartbeatMsg        = notAvailableStatus
+gps1Msg             = notAvailableStatus
+gps2Msg             = notAvailableStatus
+distSensorMsg       = notAvailableStatus
+rawImuMsg           = notAvailableStatus
+scaledPressure1Msg  = notAvailableStatus
+scaledPressure2Msg  = notAvailableStatus
+pixyCamMsg          = notAvailableStatus
 
 while heartbeatCounter  < 2:
     msg = master.recv_match()
@@ -58,27 +61,50 @@ while heartbeatCounter  < 2:
     if msg.get_type() == "DISTANCE_SENSOR":
         #print("\n\n*****Got message: %s*****" % msg.get_type())
         #print("Message: %s" % msg)
-        distSensor = msg
+        distSensorMsg = msg
 
     if msg.get_type() == "RAW_IMU":
         #print("\n\n*****Got message: %s*****" % msg.get_type())
         #print("Message: %s" % msg)
-        rawImu = msg
+        rawImuMsg = msg
 
     if msg.get_type() == "SCALED_PRESSURE":
         #print("\n\n*****Got message: %s*****" % msg.get_type())
         #print("Message: %s" % msg)
-        scaledPressure1 = msg
+        scaledPressure1Msg = msg
 
     if msg.get_type() == "SCALED_PRESSURE2":
         #print("\n\n*****Got message: %s*****" % msg.get_type())
         #print("Message: %s" % msg)
-        scaledPressure2 = msg
+        scaledPressure2Msg = msg
 
     if msg.get_type() == "LANDING_TARGET":
         #print("\n\n*****Got message: %s*****" % msg.get_type())
         #print("Message: %s" % msg)
-        pixyCam = msg
+        pixyCamMsg = msg
+
+    if msg.get_type() == "SYS_STATUS":
+        #print("\n\n*****Got message: %s*****" % msg.get_type())
+        #print("Message: %s" % msg)
+        sysStatusMsg = msg
+
+# Heartbeat OK/NOK
+try:
+    getattr(heartbeatMsg, "type")
+except AttributeError:
+    heartbeatResult = nok
+else:
+    heartbeatResult = ok
+print ("Heartbeat       %s" %heartbeatResult)
+
+# SystemStatus OK/NOK
+try:
+    getattr(sysStatusMsg, "voltage_battery")
+except AttributeError:
+    sysStatusResult = nok
+else:
+    sysStatusResult = ok
+print ("SystemStatus    %s" %sysStatusResult)
 
 # GPS1 OK/NOK
 try:
@@ -110,13 +136,13 @@ print ("GPS2            %s" %gps2MsgResult)
 
 # LeddarOne OK/NOK
 try:
-    getattr(distSensor, "current_distance")
+    getattr(distSensorMsg, "current_distance")
 except AttributeError:
     distSensorResult = nok
 else:
     distSensorResult = ok
 if distSensorResult == ok:
-    if distSensor.current_distance == 0:
+    if distSensorMsg.current_distance == 0:
         distSensorResult = nok
     else:
         distSensorResult = ok
@@ -124,28 +150,44 @@ print ("LeddarOne       %s" %distSensorResult)
 
 # Magnetometers OK/NOK TODO Detect one missing magnetometer
 try:
-    getattr(rawImu, "xmag")
+    getattr(rawImuMsg, "xmag")
 except AttributeError:
     rawImuResult = nok
 else:
     rawImuResult = ok
 if rawImuResult == ok:
-    if rawImu.xmag == 0 and rawImu.ymag == 0 and rawImu.zmag == 0:
+    if rawImuMsg.xmag == 0 and rawImuMsg.ymag == 0 and rawImuMsg.zmag == 0:
+        rawImuResult = nok
+    else:
+        rawImuResult = ok
+print ("Magnetometers   %s" %rawImuResult)
+
+# Magnetometers OK/NOK TODO Detect one missing magnetometer
+try:
+    getattr(rawImuMsg, "xmag")
+except AttributeError:
+    rawImuResult = nok
+else:
+    rawImuResult = ok
+if rawImuResult == ok:
+    if rawImuMsg.xmag == 0 and rawImuMsg.ymag == 0 and rawImuMsg.zmag == 0:
         rawImuResult = nok
     else:
         rawImuResult = ok
 print ("Magnetometers   %s" %rawImuResult)
 
 print("======================================================================")
-print("Heartbeat       %s" % heartbeatMsg)
-print("GPS1            %s   %s" % (gps1MsgResult, gps1Msg))
-print("GPS2            %s   %s" % (gps2MsgResult, gps2Msg))
-print("LeddarOne       %s   %s" % (distSensorResult, distSensor))
-print("RawIMU          %s" % rawImu)
-print("ScaledPressure1 %s" % scaledPressure1)
-print("ScaledPressure2 %s" % scaledPressure2)
-print("PixyCam         %s" % pixyCam)
+print("Heartbeat        %s      %s" % (heartbeatResult, heartbeatMsg))
+print("SystemStatus     %s      %s" % (sysStatusResult, sysStatusMsg))
+print("GPS1             %s      %s" % (gps1MsgResult, gps1Msg))
+print("GPS2             %s      %s" % (gps2MsgResult, gps2Msg))
+print("LeddarOne        %s      %s" % (distSensorResult, distSensorMsg))
+print("RawIMU           %s" % rawImuMsg)
+print("ScaledPressure1  %s" % scaledPressure1Msg)
+print("ScaledPressure2  %s" % scaledPressure2Msg)
+print("PixyCam          %s" % pixyCamMsg)
 print("======================================================================")
 
 # TODO Magnetometer, Rangefinder(Leddarone), PixyCam, IMU Pressure, IMU Accel, IMU Gyro,
+
 print("Program Finished")

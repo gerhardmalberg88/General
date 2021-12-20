@@ -6,6 +6,10 @@ FCU Communication
 from pymavlink import mavutil
 import argparse
 import sys
+from datetime import datetime
+
+print("testFCU.py Started")
+print(datetime.now())
 
 # Instantiate the parser
 parser = argparse.ArgumentParser()
@@ -16,7 +20,7 @@ args = parser.parse_args()
 #print("Argument values:")
 #print(args.pos_arg1)
 
-print("Program Started")
+#print("Program Started")
 # Create the connection
 # Need to provide the serial port and baudrate
 master = mavutil.mavlink_connection(args.pos_arg1)
@@ -162,20 +166,6 @@ if rawImuResult == ok:
         rawImuResult = ok
 print ("Magnetometers   %s" %rawImuResult)
 
-# Magnetometers OK/NOK TODO Detect one missing magnetometer
-try:
-    getattr(rawImuMsg, "xmag")
-except AttributeError:
-    rawImuResult = nok
-else:
-    rawImuResult = ok
-if rawImuResult == ok:
-    if rawImuMsg.xmag == 0 and rawImuMsg.ymag == 0 and rawImuMsg.zmag == 0:
-        rawImuResult = nok
-    else:
-        rawImuResult = ok
-print ("Magnetometers   %s" %rawImuResult)
-
 print("======================================================================")
 print("Heartbeat        %s      %s" % (heartbeatResult, heartbeatMsg))
 print("SystemStatus     %s      %s" % (sysStatusResult, sysStatusMsg))
@@ -185,7 +175,7 @@ print("LeddarOne        %s      %s" % (distSensorResult, distSensorMsg))
 print("RawIMU           %s" % rawImuMsg)
 print("ScaledPressure1  %s" % scaledPressure1Msg)
 print("ScaledPressure2  %s" % scaledPressure2Msg)
-print("PixyCam          %s" % pixyCamMsg)
+#print("PixyCam          %s" % pixyCamMsg)
 print("======================================================================")
 
 # TODO Magnetometer, Rangefinder(Leddarone), PixyCam, IMU Pressure, IMU Accel, IMU Gyro,

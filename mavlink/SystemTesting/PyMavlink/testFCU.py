@@ -7,9 +7,35 @@ from pymavlink import mavutil
 import argparse
 import sys
 from datetime import datetime
+import subprocess
 
 print("testFCU.py Started")
 print(datetime.now())
+
+lsusbOutput = subprocess.check_output("lsusb")
+splittedUsbOutput = lsusbOutput.split()
+
+rm500qModemUSBID    = "2c7c:0800"
+fcuUSBID            = "26ac:0011"
+pixyCamUSBID        = "b1ac:f000"
+
+rm500qModemUSBState = "NOK"
+fcuUSBState         = "NOK"
+pixyCamUSBState     = "NOK"
+
+for i in range(len(splittedUsbOutput)):
+    if rm500qModemUSBID == splittedUsbOutput[i]:
+        rm500qModemUSBState = "OK"
+    if fcuUSBID == splittedUsbOutput[i]:
+        fcuUSBState = "OK"
+    if pixyCamUSBID == splittedUsbOutput[i]:
+        pixyCamUSBState = "OK"
+
+print("======================================================================")
+print("Modem USB        %s" %rm500qModemUSBState)
+print("FCU USB          %s" %fcuUSBState)
+print("PixyCam USB      %s" %pixyCamUSBState)
+print("======================================================================")
 
 # Instantiate the parser
 parser = argparse.ArgumentParser()
@@ -178,6 +204,6 @@ print("ScaledPressure2  %s" % scaledPressure2Msg)
 #print("PixyCam          %s" % pixyCamMsg)
 print("======================================================================")
 
-# TODO Magnetometer, Rangefinder(Leddarone), PixyCam, IMU Pressure, IMU Accel, IMU Gyro,
+# TODO PixyCam, Modem
 
 print("Program Finished")

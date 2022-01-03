@@ -1,8 +1,3 @@
-"""
-FCU Communication
-"""
-
-# Import mavutil
 from pymavlink import mavutil
 import argparse
 import sys
@@ -10,7 +5,6 @@ from datetime import datetime
 import subprocess
 
 print("testFCU.py Started")
-print(datetime.now())
 
 #Instantiate the parser
 parser = argparse.ArgumentParser()
@@ -21,13 +15,10 @@ parser.add_argument('--connection', type=str, default="/dev/ttyACM0",
 parser.add_argument('--loop', type=int, default=1,
         help="Set the loop iterations if needed; Default: 1")
 args = parser.parse_args()
-
-#print("Argument values:")
-#print(args.pos_arg1)
-
 loopIter = 0
 
 while loopIter < args.loop:
+    print(datetime.now())
     heartbeatCounter = 0
     notAvailableStatus = "Not Available"
     ok  = "OK"

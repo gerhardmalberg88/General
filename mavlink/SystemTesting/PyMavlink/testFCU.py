@@ -11,11 +11,20 @@ parser = argparse.ArgumentParser()
 # Parse Serial path or UDP string
 parser.add_argument('--connection', type=str, default="/dev/ttyACM0",
         help="For Serial use /dev/ttyACM0 For UDP use udp:localhost:14460; Default: /dev/ttyACM0")
-# Parse Loop requirement
+# Parse Loop requirment
 parser.add_argument('--loop', type=int, default=1,
         help="Set the loop iterations if needed; Default: 1")
+# Parse Log requirment
+parser.add_argument('--log', type=str, default="",
+        help="Set the log file if log used;")
 args = parser.parse_args()
 loopIter = 0
+
+if args.log != "":
+    print("Logging test results as append to file: %s" %args.log)
+    filePath = args.log
+    sys.stdout = open(filePath, "a")
+
 
 while loopIter < args.loop:
     print(datetime.now())
@@ -234,5 +243,3 @@ while loopIter < args.loop:
     # TODO PixyCam, Modem
 
     loopIter = loopIter + 1
-
-print("Program Finished")

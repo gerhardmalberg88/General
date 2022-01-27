@@ -1,0 +1,40 @@
+42: AHRS {omegaIx : -0.000767251418438, omegaIy : -0.000164222481544, omegaIz : -0.00322808278725, accel_weight : 0.0, renorm_val : 0.0, error_rp : 0.000658802513499, error_yaw : 0.00146602606401}
+44: AHRS2 {roll : -0.00693528586999, pitch : -0.0047899428755, yaw : 1.10431873798, altitude : 0.0, lat : 0, lng : 0}
+44: AHRS3 {roll : -0.00592053309083, pitch : -0.00961781851947, yaw : 1.19125247002, altitude : 37.4799995422, lat : 602234734, lng : 247570868, v1 : 0.0, v2 : 0.0, v3 : 0.0, v4 : 0.0}
+44: ATTITUDE {time_boot_ms : 696832, roll : -0.00592053309083, pitch : -0.00961781851947, yaw : 1.19125247002, rollspeed : -6.46107364446e-05, pitchspeed : -0.000820075918455, yawspeed : 0.00207054056227}
+42: BATTERY_STATUS {id : 0, battery_function : 0, type : 0, temperature : 32767, voltages : [65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535], current_battery : -76, current_consumed : 35, energy_consumed : 28, battery_remaining : 99, time_remaining : 0, charge_state : 0, voltages_ext : [0, 0, 0, 0], mode : 0, fault_bitmask : 0}
+42: BATTERY_STATUS {id : 0, battery_function : 0, type : 0, temperature : 32767, voltages : [65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535], current_battery : -76, current_consumed : 35, energy_consumed : 28, battery_remaining : 99, time_remaining : 0, charge_state : 0, voltages_ext : [0, 0, 0, 0], mode : 0, fault_bitmask : 0}
+42: DISTANCE_SENSOR {time_boot_ms : 696854, min_distance : 20, max_distance : 1500, current_distance : 24, type : 0, id : 0, orientation : 25, covariance : 0, horizontal_fov : 0.0, vertical_fov : 0.0, quaternion : [0.0, 0.0, 0.0, 0.0], signal_quality : 0}
+42: DISTANCE_SENSOR {time_boot_ms : 696854, min_distance : 20, max_distance : 1500, current_distance : 24, type : 0, id : 0, orientation : 25, covariance : 0, horizontal_fov : 0.0, vertical_fov : 0.0, quaternion : [0.0, 0.0, 0.0, 0.0], signal_quality : 0}
+42: EKF_STATUS_REPORT {flags : 895, velocity_variance : 0.0120727894828, pos_horiz_variance : 0.0161285530776, pos_vert_variance : 0.00507979886606, compass_variance : 0.080650664866, terrain_alt_variance : 0.0, airspeed_variance : 0.0}
+42: ESC_TELEMETRY_1_TO_4 {temperature : [0, 0, 0, 0], voltage : [0, 0, 0, 0], current : [0, 0, 0, 0], totalcurrent : [0, 0, 0, 0], rpm : [0, 0, 0, 0], count : [0, 0, 0, 0]}
+42: ESC_TELEMETRY_5_TO_8 {temperature : [0, 0, 0, 0], voltage : [0, 0, 0, 0], current : [0, 0, 0, 0], totalcurrent : [0, 0, 0, 0], rpm : [0, 0, 0, 0], count : [0, 0, 0, 0]}
+42: GLOBAL_POSITION_INT {time_boot_ms : 696853, lat : 602234734, lon : 247570868, alt : 37480, relative_alt : -61, vx : 2, vy : 0, vz : 0, hdg : 6825}
+42: GPS2_RAW {time_usec : 696683000, fix_type : 3, lat : 602234639, lon : 247571998, alt : 32950, eph : 330, epv : 364, vel : 2, cog : 25692, satellites_visible : 6, dgps_numch : 0, dgps_age : 0, yaw : 0, alt_ellipsoid : 0, h_acc : 0, v_acc : 0, vel_acc : 0, hdg_acc : 0}
+42: GPS_RAW_INT {time_usec : 696682000, fix_type : 3, lat : 602234759, lon : 247570125, alt : 36090, eph : 204, epv : 309, vel : 7, cog : 18168, satellites_visible : 7, alt_ellipsoid : 0, h_acc : 2991, v_acc : 2123, vel_acc : 405, hdg_acc : 0, yaw : 0}
+22: HEARTBEAT {type : 13, autopilot : 3, base_mode : 81, custom_mode : 0, system_status : 3, mavlink_version : 3}
+42: HWSTATUS {Vcc : 5011, I2Cerr : 0}
+42: LOCAL_POSITION_NED {time_boot_ms : 696853, x : -1.08786964417, y : 5.47450351715, z : 0.0612661838531, vx : 0.021383581683, vy : 0.00978864170611, vz : 0.000253640901065}
+42: MEMINFO {brkval : 0, freemem : 13280, freemem32 : 13280}
+42: MISSION_CURRENT {seq : 0}
+42: MOUNT_STATUS {target_system : 0, target_component : 0, pointing_a : 55, pointing_b : 0, pointing_c : 0}
+42: NAV_CONTROLLER_OUTPUT {nav_roll : -0.338516235352, nav_pitch : -0.55137616396, nav_bearing : 68, target_bearing : 0, wp_dist : 0, alt_error : -2.40873384476, aspd_error : 0.0, xtrack_error : 0.0}
+871: PARAM_VALUE {param_id : LAND_HEADING, param_value : -1.0, param_type : 4, param_count : 871, param_index : 870}
+42: POWER_STATUS {Vcc : 5011, Vservo : 0, flags : 5}
+42: RANGEFINDER {distance : 0.239999994636, voltage : 0.0}
+42: RAW_IMU {time_usec : 696852490, xacc : 6, yacc : 12, zacc : -1001, xgyro : 1, ygyro : 0, zgyro : 5, xmag : 76, ymag : -116, zmag : 448, id : 0, temperature : 0}
+42: RAW_IMU {time_usec : 696852490, xacc : 6, yacc : 12, zacc : -1001, xgyro : 1, ygyro : 0, zgyro : 5, xmag : 76, ymag : -116, zmag : 448, id : 0, temperature : 0}
+42: RC_CHANNELS {time_boot_ms : 696853, chancount : 0, chan1_raw : 0, chan2_raw : 0, chan3_raw : 0, chan4_raw : 0, chan5_raw : 0, chan6_raw : 0, chan7_raw : 0, chan8_raw : 0, chan9_raw : 0, chan10_raw : 0, chan11_raw : 0, chan12_raw : 0, chan13_raw : 0, chan14_raw : 0, chan15_raw : 0, chan16_raw : 0, chan17_raw : 0, chan18_raw : 0, rssi : 0}
+42: SCALED_IMU2 {time_boot_ms : 696852, xacc : 14, yacc : 8, zacc : -1008, xgyro : 23, ygyro : -22, zgyro : 14, xmag : 82, ymag : -117, zmag : 452, temperature : 0}
+42: SCALED_IMU3 {time_boot_ms : 696852, xacc : 6, yacc : 16, zacc : -993, xgyro : -8, ygyro : -5, zgyro : 0, xmag : 0, ymag : 0, zmag : 0, temperature : 0}
+42: SCALED_PRESSURE {time_boot_ms : 696852, press_abs : 1013.55480957, press_diff : 0.0, temperature : 4340, temperature_press_diff : 0}
+42: SCALED_PRESSURE2 {time_boot_ms : 696852, press_abs : 1013.58496094, press_diff : -0.142265617847, temperature : 4034, temperature_press_diff : 0}
+4: SENSOR_OFFSETS {mag_ofs_x : 42, mag_ofs_y : 477, mag_ofs_z : 196, mag_declination : 0.154461696744, raw_press : 101358, raw_temp : 4340, gyro_cal_x : 0.0156222041696, gyro_cal_y : -0.00470676273108, gyro_cal_z : 0.013766521588, accel_cal_x : -0.176620006561, accel_cal_y : 0.0467923767865, accel_cal_z : -0.00777701335028}
+42: SERVO_OUTPUT_RAW {time_usec : 696853788, port : 0, servo1_raw : 1000, servo2_raw : 1000, servo3_raw : 1000, servo4_raw : 1000, servo5_raw : 1000, servo6_raw : 1000, servo7_raw : 0, servo8_raw : 0, servo9_raw : 1000, servo10_raw : 1000, servo11_raw : 0, servo12_raw : 0, servo13_raw : 0, servo14_raw : 0, servo15_raw : 0, servo16_raw : 0}
+4: STATUSTEXT {severity : 6, text : Frame: HEXA, id : 0, chunk_seq : 0}
+42: SYSTEM_TIME {time_unix_usec : 1638880013378338, time_boot_ms : 696853}
+42: SYS_STATUS {onboard_control_sensors_present : 56688047, onboard_control_sensors_enabled : 39886255, onboard_control_sensors_health : 56688047, load : 478, voltage_battery : 22717, current_battery : -76, battery_remaining : 99, drop_rate_comm : 0, errors_comm : 0, errors_count1 : 0, errors_count2 : 0, errors_count3 : 0, errors_count4 : 0}
+42: TERRAIN_REPORT {lat : 602234734, lon : 247570868, spacing : 100, terrain_height : 43.2335624695, current_height : -0.334377586842, pending : 0, loaded : 336}
+2: TIMESYNC {tc1 : 0, ts1 : 690177975010}
+44: VFR_HUD {airspeed : 0.0409401766956, groundspeed : 0.0230019148439, heading : 68, throttle : 0, alt : 37.4799995422, climb : -0.000869221461471}
+42: VIBRATION {time_usec : 696854979, vibration_x : 0.0206423718482, vibration_y : 0.0209924280643, vibration_z : 0.0357707738876, clipping_0 : 0, clipping_1 : 0, clipping_2 : 0}

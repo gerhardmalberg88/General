@@ -8,7 +8,7 @@ import matplotlib.dates as md
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("-i", "--inputfilename", type=str, default="BatteryTestOutput-1726-time-edited.csv", required = True, 
+parser.add_argument("-i", "--inputfilename", type=str, default="", required = True, 
         help="File full name must be entered. For example: exampleinput.csv")
 
 parser.add_argument("-o", "--outputfilename", type=str, default="", 
@@ -34,7 +34,7 @@ parser.add_argument("-t", "--ticklabels", type=int, default=None,
 
 args = parser.parse_args()
 
-dataFile = open(args.inputfilename, "r") # BatteryTestOutput-1726-time-edited.csv
+dataFile = open(args.inputfilename, "r")
 dataReader = csv.reader(dataFile, delimiter=";")
 data = []
 for row in dataReader:
@@ -48,7 +48,6 @@ for col in range(0,dataColumnsSize):
     dataHeader = data[0][col]
     dataHeaderStripped = dataHeader.replace(" ", "") # Remove white spaces
     dataHeaderStripped = ''.join([i for i in dataHeaderStripped if not i.isdigit()]) # Remove digits
-    #print("alpha ", dataHeaderStripped.isalpha(), " string ", dataHeaderStripped)
     if dataHeaderStripped.isalpha() == False:
         print("Enter headers in correct alphabetic format ", dataHeaderStripped)
         exit()

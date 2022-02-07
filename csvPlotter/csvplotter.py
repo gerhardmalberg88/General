@@ -1,3 +1,10 @@
+'''
+Example1: Plot and save ALL csv data
+csvplotter.py -i example_input_file.csv -o example_output_file.png --xlabel example_xaxis --ylabel example_ylabel --title example_title -x Time
+
+Example2: Plot and save only specific column data
+csvplotter.py -i example_input_file.csv -o example_output_file.png --xlabel example_xaxis --ylabel example_ylabel --title example_title -x Time -y example_data1_header example_data2_header
+'''
 import csv
 import re
 import matplotlib.pyplot as plt
@@ -17,9 +24,6 @@ parser.add_argument("-o", "--outputfilename", type=str, default="",
 parser.add_argument("-x", "--xaxis", type=str, default="Time",  required = True,
         help="Enter x-axis header name")
 
-parser.add_argument("-y", "--yaxiscount", type=int, default=0,  required = True,
-        help="Enter number of y-axis plotted. Enter 0 if all y-axis need to be plotted")
-
 parser.add_argument("--xlabel", type=str, default="x - axis",
         help="Enter x-axis label")
 
@@ -30,9 +34,17 @@ parser.add_argument("--title", type=str, default="title",
         help="Enter title")
 
 parser.add_argument("-t", "--ticklabels", type=int, default=None, 
-        help="Quantity of tick labels can be defined here if time, date or name stmaps are used")
+        help="Quantity of tick labels can be defined here if time, date or name stamps are used")
+
+parser.add_argument("-y", "--yaxis", type=str, default=None, nargs="+",
+        help="Enter y-axis header names")
 
 args = parser.parse_args()
+
+if args.yaxis != None:
+    yaxiscount = len(args.yaxis)
+if args.yaxis == None:
+    yaxiscount = None
 
 dataFile = open(args.inputfilename, "r")
 dataReader = csv.reader(dataFile, delimiter=";")
@@ -49,13 +61,13 @@ for col in range(0,dataColumnsSize):
     dataHeaderStripped = dataHeader.replace(" ", "") # Remove white spaces
     dataHeaderStripped = ''.join([i for i in dataHeaderStripped if not i.isdigit()]) # Remove digits
     if dataHeaderStripped.isalpha() == False:
-        print("Enter headers in correct alphabetic format ", dataHeaderStripped)
+        print("Headers must be present. Enter headers in correct alphabetic format.", dataHeaderStripped)
         exit()
 
 # Check if xaxis header is valid
-if args.yaxiscount >= 1:
-    columnsToPlot = [None for x in range(args.yaxiscount+1)]
-if args.yaxiscount == 0:
+if yaxiscount != None and yaxiscount >= 0:
+    columnsToPlot = [None for x in range(yaxiscount+1)]
+if yaxiscount == None:
     columnsToPlot = [None for x in range(dataColumnsSize+1)]
 
 headerNameCounter = 0
@@ -75,12 +87,13 @@ for i in range(0, 1):
                     columnsToPlot[0] = col
     prevHeaderNameCounter = headerNameCounter
 
-# Get header names if yaxiscount is more than 0, else plot all
-if args.yaxiscount >= 1:
-    yAxisHeaderNames = [None for x in range(args.yaxiscount)]
-    for i in range(0,args.yaxiscount):
-        print("Enter ",i+1," y-axis header name", end =" ")
-        yAxisHeaderNames[i] = input()
+# Get header names if yaxiscount is more than 0 and is not None, else plot all
+if yaxiscount != None and yaxiscount >= 0:
+    yAxisHeaderNames = [None for x in range(yaxiscount)]
+    for i in range(0,yaxiscount):
+        #print("Enter ",i+1," y-axis header name", end =" ")
+        #input() # Manual enter can optionally be used
+        yAxisHeaderNames[i] = args.yaxis[i]
 
     # Headers match and index
     headerNameCounter = 0
@@ -100,8 +113,8 @@ if args.yaxiscount >= 1:
                         columnsToPlot[i+1] = col
         prevHeaderNameCounter = headerNameCounter 
 
-# If yaxiscount = 0 then plot all columns
-if args.yaxiscount == 0:
+# If yaxiscount is not entered then plot all columns
+if yaxiscount == None:
     for col in range(0, dataColumnsSize):
         if args.xaxis != data[0][col]:
             columnsToPlot[col+1] = col

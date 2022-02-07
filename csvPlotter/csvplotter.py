@@ -3,22 +3,21 @@ import re
 import matplotlib.pyplot as plt
 import numpy as np
 import argparse
+from statistics import mean
+import matplotlib.dates as md
 
-# TODO Parser implementation
-
-#Instantiate the parser
 parser = argparse.ArgumentParser()
 
-parser.add_argument("--inputfilename", type=str, default="BatteryTestOutput-1726-time-edited.csv", # TODO required = True, 
+parser.add_argument("-i", "--inputfilename", type=str, default="BatteryTestOutput-1726-time-edited.csv", required = True, 
         help="File full name must be entered. For example: exampleinput.csv")
 
-parser.add_argument("--outputfilename", type=str, default="", # TODO required = True, 
-        help="File name must be entered. For example: exampleoutput")
+parser.add_argument("-o", "--outputfilename", type=str, default="", 
+        help="File name must be entered as full name with extension. For example: exampleoutput.png")
 
-parser.add_argument("--xaxis", type=str, default="Time",  required = True,
+parser.add_argument("-x", "--xaxis", type=str, default="Time",  required = True,
         help="Enter x-axis header name")
 
-parser.add_argument("--yaxiscount", type=int, default=0,  required = True,
+parser.add_argument("-y", "--yaxiscount", type=int, default=0,  required = True,
         help="Enter number of y-axis plotted. Enter 0 if all y-axis need to be plotted")
 
 parser.add_argument("--xlabel", type=str, default="x - axis",
@@ -30,6 +29,9 @@ parser.add_argument("--ylabel", type=str, default="y - axis",
 parser.add_argument("--title", type=str, default="title",
         help="Enter title")
 
+parser.add_argument("-t", "--ticklabels", type=int, default=None, 
+        help="Quantity of tick labels can be defined here if time, date or name stmaps are used")
+
 args = parser.parse_args()
 
 dataFile = open(args.inputfilename, "r") # BatteryTestOutput-1726-time-edited.csv
@@ -39,7 +41,7 @@ for row in dataReader:
     data.append(row)
 dataRowsSize = len(data)
 dataColumnsSize = len(data[0])   
-print("Rows ", dataRowsSize, " Columns ", dataColumnsSize)
+print("Size of CSV: Rows ", dataRowsSize, " Columns ", dataColumnsSize)
 
 # Headers detection
 for col in range(0,dataColumnsSize):
@@ -80,7 +82,6 @@ if args.yaxiscount >= 1:
     for i in range(0,args.yaxiscount):
         print("Enter ",i+1," y-axis header name", end =" ")
         yAxisHeaderNames[i] = input()
-    #print(yAxisHeaderNames)
 
     # Headers match and index
     headerNameCounter = 0
@@ -109,54 +110,90 @@ if args.yaxiscount == 0:
     removeNones = [i for i in columnsToPlot if i != None]
     columnsToPlot = removeNones
 
-
-# Dataconversion
+# Data conversion
+timePatternUsed = False # Dedicates if time pattern 23.59.59 is used or not
 dataFloat = [[None for x in range(dataColumnsSize)] for y in range(dataRowsSize)] 
 for row in range(1,dataRowsSize):
-    for col in range(0,dataColumnsSize):
-        #print(data[row][col])      
+    for col in range(0,dataColumnsSize):    
         try:
             dataFloat[row][col] = float(data[row][col].replace(',', '.')) # Convert to float
         except ValueError: #If non convertable data is found, check if it is correct time stamp
-            #print("Not a float")
             isPatternTime = re.search(r"\d{2}.\d{2}.\d{2}", data[row][col])
             if isPatternTime == None:
-                print("Bad luck, time pattern is invalid, enter time in following pattern as interger value <1> or time <23.59.59>")
+                print("Time pattern is invalid, enter time in following pattern as interger value <1> or time <23.59.59>")
                 exit()
-            else:
-                print("Time stamp at: ", isPatternTime.string)
-                #print(type(isPatternTime))
+            if isPatternTime != None:
+                timePatternUsed = True
 
 # Data transposing for plotting
 numpyArrayDataFloat = np.array(dataFloat) # Create numpy list from converted data and transpose column vector to row vector for plotter
 transposeNumpyArrayDataFloat = numpyArrayDataFloat.T
 transposedToList = transposeNumpyArrayDataFloat.tolist()
+arrayToStoreTimePattern = [None for x in range(dataRowsSize)] # THISS
 
-xAxis = transposedToList[0]
-yAxis = transposedToList
+if timePatternUsed == False:
+    xAxis = transposedToList[0]
+    yAxis = transposedToList
+if timePatternUsed == True:
+    xAxis = list(range(1, dataRowsSize+1))
+    yAxis = transposedToList
+    yAxis[0] = xAxis
 
-#plt.scatter(xAxis, yAxis[0])
-#plt.show()
-#exit()
+    if args.ticklabels == None:
+        tickLabelsCoefficient = -0.95
+        tickLablesConstant = dataRowsSize+1
+        tickLablesQuantity = tickLabelsCoefficient*dataRowsSize+tickLablesConstant
+        tickLableCounter = 0
+        for i in range(1, dataRowsSize):
+            if tickLableCounter >= tickLablesQuantity:
+                tickLableCounter = 0
+                arrayToStoreTimePattern[i] = data[i][columnsToPlot[0]]
+            if i == 1:
+                arrayToStoreTimePattern[i] = data[i][columnsToPlot[0]]
+            if i == dataRowsSize:
+                arrayToStoreTimePattern[i] = data[i][columnsToPlot[0]]
+            tickLableCounter = tickLableCounter + 1
 
-'''
-print("************")
-print(xAxis)
-print("************")
-print(yAxis[3])
-print("************")
-'''
+    if args.ticklabels != None and args.ticklabels > 0:
+        tickLablesQuantity = dataRowsSize/args.ticklabels
+        tickLableCounter = 0
+        for i in range(1, dataRowsSize):
+            if tickLableCounter >= tickLablesQuantity:
+                tickLableCounter = 0
+                arrayToStoreTimePattern[i] = data[i][columnsToPlot[0]]
+            if i == 1:
+                arrayToStoreTimePattern[i] = data[i][columnsToPlot[0]]
+            if i == dataRowsSize-1:
+                arrayToStoreTimePattern[i] = data[i][columnsToPlot[0]]
+            tickLableCounter = tickLableCounter + 1
+
+    plt.xticks(xAxis, arrayToStoreTimePattern)
+    plt.subplots_adjust(bottom=0.2)
+    plt.xticks(rotation=90)
 
 for i in range(1, len(columnsToPlot)):
     plt.plot(xAxis, yAxis[columnsToPlot[i]], label = data[0][columnsToPlot[i]])
+
+# Calculate min,mean,max
+colMaximum = [None for x in range(len(columnsToPlot))]
+colMinimum = [None for x in range(len(columnsToPlot))]
+colMean = [None for x in range(len(columnsToPlot))]
+for col in range(0, len(columnsToPlot)):
+    removeNones = [i for i in yAxis[col] if i != None]
+    colMaximum[col] = max(removeNones)
+    colMinimum[col] = min(removeNones)
+    colMean[col] = mean(removeNones)
+print(data[0])
+print("Max ", colMaximum)
+print("Min ", colMinimum)
+print("Mean ", colMean)
 
 plt.xlabel(args.xlabel)
 plt.ylabel(args.ylabel)
 plt.title(args.title)
 plt.legend()
+if args.outputfilename != "":
+    plt.savefig(args.outputfilename)
 plt.show()
 
-
-# save as picture
-# calculate max avg min values
-# add support for white spaced argument
+# TODO Add option for two x axis plots

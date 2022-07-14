@@ -113,7 +113,6 @@ int main(void)
   {
 	  for(int i = 0; i < sampleQuantity; i++)
 	  {
-		  // TODO Implement averaging
 		  // TODO Implement cold junction compensation
 		  sConfig.Channel = ADC_CHANNEL_0;
 		  HAL_ADC_ConfigChannel(&hadc1, &sConfig);
@@ -223,7 +222,6 @@ int main(void)
 
 	  statusCheckUART = HAL_UART_Transmit(&huart2, (uint8_t*)bufferToUART, sizeof(bufferToUART), 500);
 
-	  //HAL_Delay(974); 	// TODO Remove this later
 	  counter++;		// TODO Better implementation
     /* USER CODE END WHILE */
 
